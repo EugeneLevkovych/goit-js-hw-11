@@ -1,16 +1,43 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
+const loaderEl = document.querySelector('.loader');
+// console.dir(loaderEl);
 
 const createGalleryCardTempplate = imgInfo => {
   // console.log(imgInfo);
   return `<li class="gallery-card">
-  <img class="gallery-img" src="${imgInfo.webformatURL}" alt=""/>
+  <a href="${imgInfo.largeImageURL}" class="gallery-item">
+  <img class="gallery-img" src="${imgInfo.webformatURL}" alt="${imgInfo.tags}"/>
+  <div class="text-info">
+             <p>
+                <span>Likes</span>
+                <span>${imgInfo.likes}</span>
+                
+            </p>
+            <p>
+                <span>Views</span>
+                <span>${imgInfo.views}</span>
+                
+            </p>
+            <p>
+                
+                <span>Comments</span>
+                <span>${imgInfo.comments}</span>
+            </p>
+            <p>
+                
+                <span>Downloads</span>
+                <span>${imgInfo.downloads}</span>
+            </p>
+       
+          </div>
+  </a>
   </li>
   `;
 };
@@ -21,7 +48,7 @@ const onSearchFormSubmit = event => {
   const searchedQuery = event.currentTarget.elements.user_query.value.trim();
   console.log(searchedQuery);
   searchFormEl.reset();
-
+  loaderEl.classList.remove('is-hidden');
   fetch(
     `https://pixabay.com/api/?key=48247224-415eb498da8da81883dddb739&q=${searchedQuery}&image_type=photo&orientation=horizontal&safesearch=true`
   )
@@ -43,6 +70,7 @@ const onSearchFormSubmit = event => {
 
         return;
       }
+
       const galleryTemplate = data.hits
         .map(el => createGalleryCardTempplate(el))
         .join();
@@ -54,3 +82,11 @@ const onSearchFormSubmit = event => {
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
+
+const lightbox = new SimpleLightbox('.js-gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  animationSpeed: 250,
+});
+// loaderEl.classList.remove('is-hidden');
+// loaderEl.classList.add('is-hidden');
