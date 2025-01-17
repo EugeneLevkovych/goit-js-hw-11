@@ -4,43 +4,13 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+import { createGalleryCardTempplate } from './js/render-functions';
+import { fetchPhotosByQuery } from './js/pixabay-api';
+
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
 const loaderEl = document.querySelector('.loader');
 // console.dir(loaderEl);
-
-const createGalleryCardTempplate = imgInfo => {
-  // console.log(imgInfo);
-  return `<li class="gallery-card">
-  <a href="${imgInfo.largeImageURL}" class="gallery-item">
-  <img class="gallery-img" src="${imgInfo.webformatURL}" alt="${imgInfo.tags}"/>
-  <div class="text-info">
-             <p>
-                <span>Likes</span>
-                <span>${imgInfo.likes}</span>
-                
-            </p>
-            <p>
-                <span>Views</span>
-                <span>${imgInfo.views}</span>
-                
-            </p>
-            <p>
-                
-                <span>Comments</span>
-                <span>${imgInfo.comments}</span>
-            </p>
-            <p>
-                
-                <span>Downloads</span>
-                <span>${imgInfo.downloads}</span>
-            </p>
-       
-          </div>
-  </a>
-  </li>
-  `;
-};
 
 const onSearchFormSubmit = event => {
   event.preventDefault();
@@ -49,18 +19,11 @@ const onSearchFormSubmit = event => {
   console.log(searchedQuery);
   searchFormEl.reset();
   loaderEl.classList.remove('is-hidden');
-  fetch(
-    `https://pixabay.com/api/?key=48247224-415eb498da8da81883dddb739&q=${searchedQuery}&image_type=photo&orientation=horizontal&safesearch=true`
-  )
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    })
+  fetchPhotosByQuery(searchedQuery)
     .then(data => {
       console.log(data.hits);
       if (data.hits.length === 0) {
+        loaderEl.style.display = 'none';
         iziToast.error({
           position: 'topRight',
           message:
@@ -78,6 +41,9 @@ const onSearchFormSubmit = event => {
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      loaderEl.classList.add('is-hidden');
     });
 };
 
@@ -88,5 +54,6 @@ const lightbox = new SimpleLightbox('.js-gallery a', {
   captionPosition: 'bottom',
   animationSpeed: 250,
 });
+
 // loaderEl.classList.remove('is-hidden');
 // loaderEl.classList.add('is-hidden');
