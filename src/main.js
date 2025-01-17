@@ -16,12 +16,13 @@ const onSearchFormSubmit = event => {
   event.preventDefault();
 
   const searchedQuery = event.currentTarget.elements.user_query.value.trim();
-  console.log(searchedQuery);
+  // console.log(searchedQuery);
   searchFormEl.reset();
   loaderEl.classList.remove('is-hidden');
+
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
-      console.log(data.hits);
+      // console.log(data.hits);
       if (data.hits.length === 0) {
         loaderEl.style.display = 'none';
         iziToast.error({
@@ -38,6 +39,13 @@ const onSearchFormSubmit = event => {
         .map(el => createGalleryCardTempplate(el))
         .join();
       galleryEl.innerHTML = galleryTemplate;
+
+      const lightbox = new SimpleLightbox('.js-gallery a', {
+        captionsData: 'alt',
+        captionPosition: 'bottom',
+        animationSpeed: 250,
+      });
+      lightbox.refresh();
     })
     .catch(err => {
       console.log(err);
@@ -48,12 +56,6 @@ const onSearchFormSubmit = event => {
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
-
-const lightbox = new SimpleLightbox('.js-gallery a', {
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  animationSpeed: 250,
-});
 
 // loaderEl.classList.remove('is-hidden');
 // loaderEl.classList.add('is-hidden');
