@@ -10,28 +10,36 @@ import { fetchPhotosByQuery } from './js/pixabay-api';
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
 const loaderEl = document.querySelector('.loader');
-// console.dir(loaderEl);
 
 const onSearchFormSubmit = event => {
   event.preventDefault();
 
+  loaderEl.classList.remove('is-hidden');
+
   const searchedQuery = event.currentTarget.elements.user_query.value.trim();
   // console.log(searchedQuery);
+  if (searchedQuery === '') {
+    iziToast.error({
+      position: 'topRight',
+      message: 'Field must be filled in!',
+    });
+    loaderEl.classList.add('is-hidden');
+    return;
+  }
   searchFormEl.reset();
-  loaderEl.classList.remove('is-hidden');
 
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
-      // console.log(data.hits);
-      if (data.hits.length === 0) {
-        // loaderEl.style.display = 'none';
+      console.dir(data);
+      if (data.total === 0) {
+        // if (data.hits.length === 0) {
+        loaderEl.style.display = 'none';
         iziToast.error({
           position: 'topRight',
           message:
             'Sorry, there are no images matching your search query. Please try again!',
         });
         galleryEl.innerHTML = '';
-
         return;
       }
 
@@ -48,6 +56,11 @@ const onSearchFormSubmit = event => {
       lightbox.refresh();
     })
     .catch(err => {
+      iziToast.error({
+        title: 'Error',
+        message: 'BAD REQUEST',
+        position: 'topRight',
+      });
       console.log(err);
     })
     .finally(() => {
@@ -56,6 +69,3 @@ const onSearchFormSubmit = event => {
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
-
-// loaderEl.classList.remove('is-hidden');
-// loaderEl.classList.add('is-hidden');
