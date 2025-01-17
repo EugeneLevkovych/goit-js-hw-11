@@ -3,11 +3,12 @@
 @import url('./container.css');
 @import url('./reset.css');
 
+/* -------------------Form--------------------- */
 .search-form {
-  width: 600px;
+  width: 400px;
   display: flex;
   margin: 0 auto;
-  padding-top: 30px;
+  padding-top: 25px;
   padding-bottom: 30px;
 }
 
@@ -17,6 +18,7 @@
   height: 40px;
   padding-left: 15px;
   border: 1px solid #303030;
+  border-radius: 4px;
 }
 
 .search-btn {
@@ -28,6 +30,10 @@
   text-transform: uppercase;
   cursor: pointer;
   margin-left: 10px;
+  border-radius: 4px;
+}
+.search-btn:hover {
+  background-color: #a0cfb4;
 }
 /* -------------------Render----------------- */
 .gallery {
@@ -39,6 +45,8 @@
 
 .gallery-card {
   width: calc((100% - 60px) / 4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
 }
 
 .gallery-img {
@@ -79,7 +87,7 @@
   height: 48px;
   border-radius: 50%;
   position: relative;
-  top: 30px;
+  top: 25px;
   left: 550px;
   animation: rotate 1s linear infinite;
 }

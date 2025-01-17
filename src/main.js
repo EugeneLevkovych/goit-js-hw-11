@@ -24,7 +24,7 @@ const onSearchFormSubmit = event => {
     .then(data => {
       // console.log(data.hits);
       if (data.hits.length === 0) {
-        loaderEl.style.display = 'none';
+        // loaderEl.style.display = 'none';
         iziToast.error({
           position: 'topRight',
           message:
