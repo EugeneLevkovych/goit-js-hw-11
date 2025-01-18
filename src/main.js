@@ -32,7 +32,7 @@ const onSearchFormSubmit = event => {
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
       if (data.total === 0) {
-        // if (data.hits.length === 0)
+        galleryEl.innerHTML = '';
         loaderEl.classList.add('is-hidden');
         iziToast.error({
           position: 'topRight',
