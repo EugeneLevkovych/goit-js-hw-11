@@ -1,5 +1,5 @@
 export const createGalleryCardTempplate = imgInfo => {
-  // console.log(imgInfo);
+  //console.log(imgInfo);
   return `<li class="gallery-card">
   <a href="${imgInfo.largeImageURL}" class="gallery-item">
   <img class="gallery-img" src="${imgInfo.webformatURL}" alt="${imgInfo.tags}"/>

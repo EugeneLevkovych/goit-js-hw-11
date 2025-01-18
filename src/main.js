@@ -14,38 +14,38 @@ const loaderEl = document.querySelector('.loader');
 const onSearchFormSubmit = event => {
   event.preventDefault();
 
-  loaderEl.classList.remove('is-hidden');
-
   const searchedQuery = event.currentTarget.elements.user_query.value.trim();
-  // console.log(searchedQuery);
+
   if (searchedQuery === '') {
     iziToast.error({
       position: 'topRight',
       message: 'Field must be filled in!',
     });
-    loaderEl.classList.add('is-hidden');
     return;
   }
+  galleryEl.innerHTML = '';
+
+  loaderEl.classList.remove('is-hidden');
+
   searchFormEl.reset();
 
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
-      console.dir(data);
       if (data.total === 0) {
-        // if (data.hits.length === 0) {
-        loaderEl.style.display = 'none';
+        // if (data.hits.length === 0)
+        loaderEl.classList.add('is-hidden');
         iziToast.error({
           position: 'topRight',
           message:
             'Sorry, there are no images matching your search query. Please try again!',
         });
-        galleryEl.innerHTML = '';
         return;
       }
 
       const galleryTemplate = data.hits
         .map(el => createGalleryCardTempplate(el))
-        .join();
+        .join('');
+
       galleryEl.innerHTML = galleryTemplate;
 
       const lightbox = new SimpleLightbox('.js-gallery a', {
